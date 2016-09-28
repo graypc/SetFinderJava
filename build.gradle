@@ -1,14 +1,28 @@
 group 'PeteGray-GroupId'
-version '1.0-SNAPSHOT'
+version '1.0'
 
 apply plugin: 'java'
+apply plugin: 'application'
 
 sourceCompatibility = 1.5
+mainClassName = 'org.graypc.Main'
+
+jar {
+    from {
+        configurations.compile.collect {
+            it.isDirectory() ? it :zipTree(it)
+        }
+    }
+    manifest.attributes('Main-Class': 'org.graypc.Main')
+    baseName = 'SetFinder'
+    version = '1.0'
+}
 
 repositories {
     mavenCentral()
 }
 
 dependencies {
+    compile group: 'nu.pattern', name: 'opencv', version: '2.4.9-7'
     testCompile group: 'junit', name: 'junit', version: '4.11'
 }
