@@ -1,7 +1,20 @@
 package org.graypc;
 
-import java.io.File;
-import java.net.URL;
+/*
+ * HelloWorldSwing.java requires no other files.
+ */
+
+
+import javax.swing.*;
+
+import java.awt.*;
+
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.util.List;
+import java.util.ArrayList;
+
+/*
 import org.bytedeco.javacv.*;
 import org.bytedeco.javacpp.*;
 import org.bytedeco.javacpp.indexer.*;
@@ -9,7 +22,124 @@ import static org.bytedeco.javacpp.opencv_core.*;
 import static org.bytedeco.javacpp.opencv_imgproc.*;
 import static org.bytedeco.javacpp.opencv_calib3d.*;
 import static org.bytedeco.javacpp.opencv_objdetect.*;
+*/
 
+public class Main
+{
+    private static List<List<Card>> mCards;
+
+    /**
+     * Create the GUI and show it.  For thread safety,
+     * this method should be invoked from the
+     * event-dispatching thread.
+     */
+    private static void createAndShowGUI()
+    {
+        //Create and set up the window.
+        JFrame frame = new JFrame("SetFinder");
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+
+        JPanel mainPanel = new JPanel();
+        mainPanel.setLayout(new BoxLayout(mainPanel, BoxLayout.Y_AXIS));
+        mainPanel.setBorder(BorderFactory.createLineBorder(Color.BLACK, 2, true));
+        mainPanel.add(Box.createRigidArea(new Dimension(0, 5)));
+
+        frame.getContentPane().add(mainPanel);
+
+        mCards = new ArrayList<List<Card>>();
+
+        // For each row
+        for (int row = 0; row < 3; ++row)
+        {
+            // Add a new row of Cards
+            mCards.add(new ArrayList<Card>());
+
+            JPanel rowPanel = new JPanel();
+            rowPanel.setLayout(new BoxLayout(rowPanel, BoxLayout.X_AXIS));
+            rowPanel.add(Box.createRigidArea(new Dimension(5, 0)));
+
+            // For each column
+            for (int col = 0; col < 3; ++col)
+            {
+                // Create a new card
+                Card card = new Card(1, Card.Shade.CARD_SHADE_FULL,
+                        Card.Color.CARD_COLOR_GREEN, Card.Shape.CHARD_SHAPE_DIAMOND);
+
+                mCards.get(row).add(card);
+
+                // Add this card to the GUI
+                rowPanel.add(card);
+                rowPanel.add(Box.createRigidArea(new Dimension(5, 0)));
+            }
+            mainPanel.add(rowPanel);
+            mainPanel.add(Box.createRigidArea(new Dimension(0, 5)));
+        }
+
+        mainPanel.add(Box.createRigidArea(new Dimension(0, 5)));
+
+        JButton solveButton = new JButton("Solve");
+        solveButton.addActionListener(new ActionListener()
+        {
+            public void actionPerformed(ActionEvent actionEvent)
+            {
+                findSolution();
+            }
+        });
+
+        mainPanel.add(solveButton);
+
+        //frame.setPreferredSize(new Dimension(105 * 3, 155 * 3));
+        /*
+        container.add(new Card(1,
+                Card.Shade.CARD_SHADE_FULL,
+                Card.Color.CARD_COLOR_GREEN,
+                Card.Shape.CHARD_SHAPE_DIAMOND));
+
+        container.add(new Card(1,
+                Card.Shade.CARD_SHADE_FULL,
+                Card.Color.CARD_COLOR_GREEN,
+                Card.Shape.CHARD_SHAPE_DIAMOND));
+
+        container.add(new Card(1,
+                Card.Shade.CARD_SHADE_FULL,
+                Card.Color.CARD_COLOR_GREEN,
+                Card.Shape.CHARD_SHAPE_DIAMOND));
+
+        container.add(new Card(1,
+                Card.Shade.CARD_SHADE_FULL,
+                Card.Color.CARD_COLOR_GREEN,
+                Card.Shape.CHARD_SHAPE_DIAMOND));
+                */
+
+        //frame.setSize(new Dimension(500, 500));
+
+//        frame.getContentPane().add(label);
+
+        //Display the window.
+        frame.pack();
+        frame.setVisible(true);
+    }
+
+    private static void findSolution()
+    {
+
+    }
+
+    public static void main(String[] args)
+    {
+        //Schedule a job for the event-dispatching thread:
+        //creating and showing this application's GUI.
+        javax.swing.SwingUtilities.invokeLater(new Runnable()
+        {
+            public void run()
+            {
+                createAndShowGUI();
+            }
+        });
+    }
+}
+
+    /*
 public class Main {
 	public static void main(String[] args) throws Exception {
 		String classifierName = null;
@@ -133,4 +263,5 @@ public class Main {
 		grabber.stop();
 	}
 }
+*/
 
