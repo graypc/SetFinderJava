@@ -5,14 +5,29 @@ package org.graypc;
  */
 
 
+import org.bytedeco.javacpp.Loader;
+import org.bytedeco.javacpp.indexer.DoubleIndexer;
+import org.bytedeco.javacpp.opencv_core;
+import org.bytedeco.javacpp.opencv_objdetect;
+import org.bytedeco.javacv.*;
+
 import javax.swing.*;
 
 import java.awt.*;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.File;
+import java.net.URL;
 import java.util.List;
 import java.util.ArrayList;
+
+import static org.bytedeco.javacpp.helper.opencv_objdetect.cvHaarDetectObjects;
+import static org.bytedeco.javacpp.opencv_calib3d.cvRodrigues2;
+import static org.bytedeco.javacpp.opencv_core.*;
+import static org.bytedeco.javacpp.opencv_imgproc.*;
+import static org.bytedeco.javacpp.opencv_objdetect.CV_HAAR_DO_ROUGH_SEARCH;
+import static org.bytedeco.javacpp.opencv_objdetect.CV_HAAR_FIND_BIGGEST_OBJECT;
 
 /*
 import org.bytedeco.javacv.*;
@@ -125,6 +140,7 @@ public class Main
 
     }
 
+    /*
     public static void main(String[] args)
     {
         //Schedule a job for the event-dispatching thread:
@@ -137,10 +153,11 @@ public class Main
             }
         });
     }
-}
+    */
+//}
 
-    /*
-public class Main {
+    /**/
+//public class Main {
 	public static void main(String[] args) throws Exception {
 		String classifierName = null;
 		if (args.length > 0) {
@@ -156,7 +173,7 @@ public class Main {
 		Loader.load(opencv_objdetect.class);
 
 		// We can "cast" Pointer objects by instantiating a new object of the desired class.
-		CvHaarClassifierCascade classifier = new CvHaarClassifierCascade(cvLoad(classifierName));
+		opencv_objdetect.CvHaarClassifierCascade classifier = new opencv_objdetect.CvHaarClassifierCascade(cvLoad(classifierName));
 		if (classifier.isNull()) {
 			System.err.println("Error loading classifier file \"" + classifierName + "\".");
 			System.exit(1);
@@ -180,16 +197,16 @@ public class Main {
 		//   Java2DFrameConverter and OpenCVFrameConverter, one after the other.
 		// - Java2DFrameConverter also has static copy() methods that we can use to transfer
 		//   data more directly between BufferedImage and IplImage or Mat via Frame objects.
-		IplImage grabbedImage = converter.convert(grabber.grab());
+		opencv_core.IplImage grabbedImage = converter.convert(grabber.grab());
 		int width  = grabbedImage.width();
 		int height = grabbedImage.height();
-		IplImage grayImage    = IplImage.create(width, height, IPL_DEPTH_8U, 1);
-		IplImage rotatedImage = grabbedImage.clone();
+		opencv_core.IplImage grayImage    = opencv_core.IplImage.create(width, height, IPL_DEPTH_8U, 1);
+		opencv_core.IplImage rotatedImage = grabbedImage.clone();
 
 		// Objects allocated with a create*() or clone() factory method are automatically released
 		// by the garbage collector, but may still be explicitly released by calling release().
 		// You shall NOT call cvReleaseImage(), cvReleaseMemStorage(), etc. on objects allocated this way.
-		CvMemStorage storage = CvMemStorage.create();
+		opencv_core.CvMemStorage storage = opencv_core.CvMemStorage.create();
 
 		// The OpenCVFrameRecorder class simply uses the CvVideoWriter of opencv_videoio,
 		// but FFmpegFrameRecorder also exists as a more versatile alternative.
@@ -202,7 +219,7 @@ public class Main {
 		CanvasFrame frame = new CanvasFrame("Some Title", CanvasFrame.getDefaultGamma()/grabber.getGamma());
 
 		// Let's create some random 3D rotation...
-		CvMat randomR = CvMat.create(3, 3), randomAxis = CvMat.create(3, 1);
+		opencv_core.CvMat randomR = opencv_core.CvMat.create(3, 3), randomAxis = opencv_core.CvMat.create(3, 1);
 		// We can easily and efficiently access the elements of matrices and images
 		// through an Indexer object with the set of get() and put() methods.
 		DoubleIndexer Ridx = randomR.createIndexer(), axisIdx = randomAxis.createIndexer();
@@ -214,18 +231,18 @@ public class Main {
 		System.out.println(Ridx);
 
 		// We can allocate native arrays using constructors taking an integer as argument.
-		CvPoint hatPoints = new CvPoint(3);
+		opencv_core.CvPoint hatPoints = new opencv_core.CvPoint(3);
 
 		while (frame.isVisible() && (grabbedImage = converter.convert(grabber.grab())) != null) {
 			cvClearMemStorage(storage);
 
 			// Let's try to detect some faces! but we need a grayscale image...
 			cvCvtColor(grabbedImage, grayImage, CV_BGR2GRAY);
-			CvSeq faces = cvHaarDetectObjects(grayImage, classifier, storage,
+			opencv_core.CvSeq faces = cvHaarDetectObjects(grayImage, classifier, storage,
 					1.1, 3, CV_HAAR_FIND_BIGGEST_OBJECT | CV_HAAR_DO_ROUGH_SEARCH);
 			int total = faces.total();
 			for (int i = 0; i < total; i++) {
-				CvRect r = new CvRect(cvGetSeqElem(faces, i));
+				opencv_core.CvRect r = new opencv_core.CvRect(cvGetSeqElem(faces, i));
 				int x = r.x(), y = r.y(), w = r.width(), h = r.height();
 				cvRectangle(grabbedImage, cvPoint(x, y), cvPoint(x+w, y+h), CvScalar.RED, 1, CV_AA, 0);
 
@@ -254,7 +271,7 @@ public class Main {
 
 			cvWarpPerspective(grabbedImage, rotatedImage, randomR);
 
-			Frame rotatedFrame = converter.convert(rotatedImage);
+			org.bytedeco.javacv.Frame rotatedFrame = converter.convert(rotatedImage);
 			frame.showImage(rotatedFrame);
 			recorder.record(rotatedFrame);
 		}
@@ -263,5 +280,5 @@ public class Main {
 		grabber.stop();
 	}
 }
-*/
+/**/
 
