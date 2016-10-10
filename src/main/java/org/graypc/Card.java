@@ -92,8 +92,11 @@ public class Card extends JPanel implements MouseListener
 
     public void updateIcon()
     {
-        String fileName = getImageFileName();
+        String fileName =  getImageFileName();
+        //String fileName = "org/graypc/" + getImageFileName();
         java.net.URL imageURL = getClass().getResource(fileName);
+        System.out.format("Path[%s]\n", imageURL.getPath());
+        System.out.format("File[%s]\n", imageURL.getFile());
 
         //File imageFile = new File(imageURL.getFile());
 

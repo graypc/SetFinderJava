@@ -29,15 +29,6 @@ import static org.bytedeco.javacpp.opencv_imgproc.*;
 import static org.bytedeco.javacpp.opencv_objdetect.CV_HAAR_DO_ROUGH_SEARCH;
 import static org.bytedeco.javacpp.opencv_objdetect.CV_HAAR_FIND_BIGGEST_OBJECT;
 
-/*
-import org.bytedeco.javacv.*;
-import org.bytedeco.javacpp.*;
-import org.bytedeco.javacpp.indexer.*;
-import static org.bytedeco.javacpp.opencv_core.*;
-import static org.bytedeco.javacpp.opencv_imgproc.*;
-import static org.bytedeco.javacpp.opencv_calib3d.*;
-import static org.bytedeco.javacpp.opencv_objdetect.*;
-*/
 
 public class Main
 {
@@ -140,7 +131,6 @@ public class Main
 
     }
 
-    /*
     public static void main(String[] args)
     {
         //Schedule a job for the event-dispatching thread:
@@ -153,10 +143,9 @@ public class Main
             }
         });
     }
-    */
-//}
+}
 
-    /**/
+    /*
 //public class Main {
 	public static void main(String[] args) throws Exception {
 		String classifierName = null;
@@ -280,5 +269,5 @@ public class Main
 		grabber.stop();
 	}
 }
-/**/
+*/
 
