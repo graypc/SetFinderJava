@@ -68,7 +68,7 @@ public class Main
             for (int col = 0; col < 3; ++col)
             {
                 // Create a new card
-                Card card = new Card(1, Card.Shade.CARD_SHADE_FULL,
+                Card card = new Card(row + 1, Card.Shade.values()[col],
                         Card.Color.CARD_COLOR_GREEN, Card.Shape.CHARD_SHAPE_DIAMOND);
 
                 mCards.get(row).add(card);

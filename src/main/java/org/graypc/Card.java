@@ -85,27 +85,21 @@ public class Card extends JPanel implements MouseListener
         mLabel = new JLabel();
         add(mLabel);
         updateIcon();
-        //mLabel.setIcon(new ImageIcon(getImageFileName()));
-
         addMouseListener(this);
     }
 
     public void updateIcon()
     {
         String fileName =  getImageFileName();
-        //String fileName = "org/graypc/" + getImageFileName();
         java.net.URL imageURL = getClass().getResource(fileName);
-        System.out.format("Path[%s]\n", imageURL.getPath());
-        System.out.format("File[%s]\n", imageURL.getFile());
-
-        //File imageFile = new File(imageURL.getFile());
+        System.out.format("Path[%s]", fileName);
 
         BufferedImage img = null;
         Image imgScaled = null;
         try
         {
             img = ImageIO.read(new File(imageURL.getFile()));
-            imgScaled = img.getScaledInstance(xSize - 4, ySize - 4,
+            imgScaled = img.getScaledInstance(xSize - 4, ySize - 16,
                     Image.SCALE_SMOOTH);
             mLabel.setIcon(new ImageIcon(imgScaled));
         }
@@ -113,13 +107,8 @@ public class Card extends JPanel implements MouseListener
         {
             System.out.format("Failed to find file [%s]\n", fileName);
         }
-        /*
-        if (imageURL == null)
-            System.out.println("NULL");
-        else
-            mLabel.setIcon(new ImageIcon(imageURL));
-            */
     }
+
     public String getImageFileName()
     {
         StringBuilder fileName = new StringBuilder();
