@@ -18,23 +18,31 @@ public class Card extends JPanel implements MouseListener
 {
     public void mouseClicked(MouseEvent mouseEvent)
     {
+        JFrame frame = new JFrame();
+        CardSelector cardSelector = new CardSelector(frame);
+        CardParameters parameters = new CardParameters(mNum, mColor, mShape, mShade);
+        cardSelector.setParameters(parameters);
+        parameters = cardSelector.showDialog();
+
+        // Start here.  Add gui controls to CardSelector.
+        if (parameters != null)
+        {
+            System.out.format("New parameters.  Num[%d] Color[%s] Shape[%s] Shade[%s]\n",
+                    parameters.num, parameters.color, parameters.shape, parameters.shade);
+        }
     }
 
     public void mousePressed(MouseEvent mouseEvent)
-    {
-    }
+    {}
 
     public void mouseReleased(MouseEvent mouseEvent)
-    {
-    }
+    {}
 
     public void mouseEntered(MouseEvent mouseEvent)
-    {
-    }
+    {}
 
     public void mouseExited(MouseEvent mouseEvent)
-    {
-    }
+    {}
 
     public enum Shape
     {
@@ -55,6 +63,22 @@ public class Card extends JPanel implements MouseListener
         CARD_SHADE_FULL,
         CARD_SHADE_HASH,
         CARD_SHADE_EMPTY;
+    }
+
+    class CardParameters
+    {
+        public CardParameters(int cNum, Color cColor, Shape cShape, Shade cShade)
+        {
+            num = cNum;
+            color = cColor;
+            shape = cShape;
+            shade = cShade;
+        }
+
+        public int num;
+        public Color color;
+        public Shape shape;
+        public Shade shade;
     }
 
     private Shade mShade;
@@ -92,7 +116,7 @@ public class Card extends JPanel implements MouseListener
     {
         String fileName =  getImageFileName();
         java.net.URL imageURL = getClass().getResource(fileName);
-        System.out.format("Path[%s]", fileName);
+        //System.out.format("Path[%s]", fileName);
 
         BufferedImage img = null;
         Image imgScaled = null;
@@ -176,5 +200,22 @@ public class Card extends JPanel implements MouseListener
         fileName.append(".png");
 
         return fileName.toString();
+    }
+
+    class CardSelector extends Dialog
+    {
+        public CardSelector(Frame frame)
+        {
+            super(frame);
+        }
+
+        public void setParameters(CardParameters parameters)
+        {
+        }
+
+        public CardParameters showDialog()
+        {
+            return null;
+        }
     }
 }
