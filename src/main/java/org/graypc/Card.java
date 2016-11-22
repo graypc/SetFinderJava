@@ -30,6 +30,7 @@ public class Card extends JPanel implements MouseListener
             System.out.format("New parameters.  Num[%d] Color[%s] Shape[%s] Shade[%s]\n",
                     parameters.num, parameters.color, parameters.shape, parameters.shade);
         }
+
     }
 
     public void mousePressed(MouseEvent mouseEvent)
@@ -44,18 +45,18 @@ public class Card extends JPanel implements MouseListener
     public void mouseExited(MouseEvent mouseEvent)
     {}
 
-    public enum Shape
-    {
-        CHARD_SHAPE_OVAL,
-        CHARD_SHAPE_DIAMOND,
-        CHARD_SHAPE_SQUIGGLE;
-    }
-
     public enum Color
     {
         CARD_COLOR_RED,
         CARD_COLOR_GREEN,
         CARD_COLOR_PURPLE;
+    }
+
+    public enum Shape
+    {
+        CHARD_SHAPE_OVAL,
+        CHARD_SHAPE_DIAMOND,
+        CHARD_SHAPE_SQUIGGLE;
     }
 
     public enum Shade
@@ -73,6 +74,10 @@ public class Card extends JPanel implements MouseListener
             color = cColor;
             shape = cShape;
             shade = cShade;
+        }
+
+        public CardParameters()
+        {
         }
 
         public int num;
@@ -202,20 +207,68 @@ public class Card extends JPanel implements MouseListener
         return fileName.toString();
     }
 
-    class CardSelector extends Dialog
+    class CardSelector extends JDialog
     {
         public CardSelector(Frame frame)
         {
-            super(frame);
+            mPanel = new JPanel();
+            mParameters = new CardParameters();
+            this.getContentPane().add(mPanel);
         }
 
         public void setParameters(CardParameters parameters)
         {
+            mParameters = parameters;
         }
 
         public CardParameters showDialog()
         {
-            return null;
+            JComboBox numComboBox = new JComboBox();
+            JComboBox colorComboBox = new JComboBox();
+            JComboBox shapeComboBox = new JComboBox();
+            JComboBox shadeComboBox = new JComboBox();
+
+            mPanel.setLayout(new BoxLayout(mPanel, BoxLayout.Y_AXIS));
+            mPanel.add(numComboBox);
+            mPanel.add(colorComboBox);
+            mPanel.add(shapeComboBox);
+            mPanel.add(shadeComboBox);
+
+            numComboBox.addItem(new Integer(1));
+            numComboBox.addItem(new Integer(2));
+            numComboBox.addItem(new Integer(3));
+
+            colorComboBox.addItem(new JLabel("<html>Text color: <font color='red'>red</font></html>"));
+            colorComboBox.addItem(new JLabel("<html>Text color: <font color='green'>green</font></html>"));
+            colorComboBox.addItem(new JLabel("<html>Text color: <font color='purple'>purple</font></html>"));
+
+            shapeComboBox.addItem(new JLabel("Oval"));
+            shapeComboBox.addItem(new JLabel("Diamond"));
+            shapeComboBox.addItem(new JLabel("Squiggle"));
+
+            shadeComboBox.addItem(new JLabel("Full"));
+            shadeComboBox.addItem(new JLabel("Hash"));
+            shadeComboBox.addItem(new JLabel("Empty"));
+
+            adjustComboBoxSize(numComboBox);
+            adjustComboBoxSize(colorComboBox);
+            adjustComboBoxSize(shapeComboBox);
+            adjustComboBoxSize(shadeComboBox);
+
+            this.pack();
+
+            // Block here
+            this.setVisible(true);
+            return mParameters;
+        }
+
+        public void adjustComboBoxSize(JComboBox comboBox)
+        {
+            comboBox.setMinimumSize(new Dimension(60, 30));
+            comboBox.setPreferredSize(new Dimension(60, 30));
         }
     }
+
+    JPanel mPanel;
+    CardParameters mParameters;
 }
