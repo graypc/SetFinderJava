@@ -18,19 +18,11 @@ public class Card extends JPanel implements MouseListener
 {
     public void mouseClicked(MouseEvent mouseEvent)
     {
-        JFrame frame = new JFrame();
-        CardSelector cardSelector = new CardSelector(frame);
-        CardParameters parameters = new CardParameters(mNum, mColor, mShape, mShade);
-        cardSelector.setParameters(parameters);
-        parameters = cardSelector.showDialog();
-
-        // Start here.  Add gui controls to CardSelector.
-        if (parameters != null)
-        {
-            System.out.format("New parameters.  Num[%d] Color[%s] Shape[%s] Shade[%s]\n",
-                    parameters.num, parameters.color, parameters.shape, parameters.shade);
-        }
-
+        CardSelector cardSelector = new CardSelector();
+        cardSelector.setParameters(mParameters);
+        mParameters = cardSelector.showDialog(
+                mouseEvent.getXOnScreen(), mouseEvent.getYOnScreen());
+        updateIcon();
     }
 
     public void mousePressed(MouseEvent mouseEvent)
@@ -86,10 +78,6 @@ public class Card extends JPanel implements MouseListener
         public Shade shade;
     }
 
-    private Shade mShade;
-    private Color mColor;
-    private Shape mShape;
-    private int mNum;
     private boolean mIsSolution;
     private JLabel mLabel;
 
@@ -98,10 +86,7 @@ public class Card extends JPanel implements MouseListener
 
     public Card(int num, Shade shade, Color color, Shape shape)
     {
-        mNum = num;
-        mShade = shade;
-        mColor = color;
-        mShape = shape;
+        mParameters = new CardParameters(num, color, shape, shade);
         mIsSolution = false;
 
         setPreferredSize(new Dimension(xSize, ySize));
@@ -142,7 +127,7 @@ public class Card extends JPanel implements MouseListener
     {
         StringBuilder fileName = new StringBuilder();
 
-        switch (mNum)
+        switch (mParameters.num)
         {
             case 1:
                 fileName.append("1");
@@ -157,7 +142,7 @@ public class Card extends JPanel implements MouseListener
                 break;
         }
 
-        switch (mColor)
+        switch (mParameters.color)
         {
             case CARD_COLOR_GREEN:
                 fileName.append("G");
@@ -172,7 +157,7 @@ public class Card extends JPanel implements MouseListener
                 break;
         }
 
-        switch (mShape)
+        switch (mParameters.shape)
         {
             case CHARD_SHAPE_DIAMOND:
                 fileName.append("D");
@@ -187,7 +172,7 @@ public class Card extends JPanel implements MouseListener
                 break;
         }
 
-        switch (mShade)
+        switch (mParameters.shade)
         {
             case CARD_SHADE_EMPTY:
                 fileName.append("E");
@@ -209,11 +194,13 @@ public class Card extends JPanel implements MouseListener
 
     class CardSelector extends JDialog
     {
-        public CardSelector(Frame frame)
+        public CardSelector()
         {
             mPanel = new JPanel();
-            mParameters = new CardParameters();
+            //mParameters = new CardParameters();
+            mPanel.setPreferredSize(new Dimension(xSize, ySize));
             this.getContentPane().add(mPanel);
+            this.setModalityType(ModalityType.APPLICATION_MODAL);
         }
 
         public void setParameters(CardParameters parameters)
@@ -221,7 +208,7 @@ public class Card extends JPanel implements MouseListener
             mParameters = parameters;
         }
 
-        public CardParameters showDialog()
+        public CardParameters showDialog(int x, int y)
         {
             JComboBox numComboBox = new JComboBox();
             JComboBox colorComboBox = new JComboBox();
@@ -238,27 +225,71 @@ public class Card extends JPanel implements MouseListener
             numComboBox.addItem(new Integer(2));
             numComboBox.addItem(new Integer(3));
 
-            colorComboBox.addItem(new JLabel("<html>Text color: <font color='red'>red</font></html>"));
-            colorComboBox.addItem(new JLabel("<html>Text color: <font color='green'>green</font></html>"));
-            colorComboBox.addItem(new JLabel("<html>Text color: <font color='purple'>purple</font></html>"));
+            colorComboBox.addItem("<html><font color='red'>Red</font></html>");
+            colorComboBox.addItem("<html><font color='green'>Green</font></html>");
+            colorComboBox.addItem("<html><font color='purple'>Purple</font></html>");
 
-            shapeComboBox.addItem(new JLabel("Oval"));
-            shapeComboBox.addItem(new JLabel("Diamond"));
-            shapeComboBox.addItem(new JLabel("Squiggle"));
+            shapeComboBox.addItem("Oval");
+            shapeComboBox.addItem("Diamond");
+            shapeComboBox.addItem("Squiggle");
 
-            shadeComboBox.addItem(new JLabel("Full"));
-            shadeComboBox.addItem(new JLabel("Hash"));
-            shadeComboBox.addItem(new JLabel("Empty"));
+            shadeComboBox.addItem("Full");
+            shadeComboBox.addItem("Hash");
+            shadeComboBox.addItem("Empty");
 
             adjustComboBoxSize(numComboBox);
             adjustComboBoxSize(colorComboBox);
             adjustComboBoxSize(shapeComboBox);
             adjustComboBoxSize(shadeComboBox);
 
+            numComboBox.setSelectedIndex(mParameters.num - 1);
+            colorComboBox.setSelectedIndex(mParameters.color.ordinal());
+            shapeComboBox.setSelectedIndex(mParameters.shape.ordinal());
+            shadeComboBox.setSelectedIndex(mParameters.shade.ordinal());
+
             this.pack();
+            this.setLocation(x, y);
 
             // Block here
             this.setVisible(true);
+
+            // Update mParameters with the combobox info
+            String colorStr = (String)colorComboBox.getSelectedItem();
+            String shapeStr = (String)shapeComboBox.getSelectedItem();
+            String shadeStr = (String)shadeComboBox.getSelectedItem();
+
+            mParameters.num = (Integer)numComboBox.getSelectedItem();
+
+            // Set the color
+            if (colorStr.contains("Red"))
+                mParameters.color = Color.CARD_COLOR_RED;
+
+            else if (colorStr.contains("Green"))
+                mParameters.color = Color.CARD_COLOR_GREEN;
+
+            else
+                mParameters.color = Color.CARD_COLOR_PURPLE;
+
+            // Set the shape
+            if (shapeStr.contains("Oval"))
+                mParameters.shape = Shape.CHARD_SHAPE_OVAL;
+
+            else if (shapeStr.contains("Diamond"))
+                mParameters.shape = Shape.CHARD_SHAPE_DIAMOND;
+
+            else
+                mParameters.shape = Shape.CHARD_SHAPE_SQUIGGLE;
+
+            // Set the shade
+            if (shadeStr.contains("Full"))
+                mParameters.shade = Shade.CARD_SHADE_FULL;
+
+            else if (shadeStr.contains("Hash"))
+                mParameters.shade = Shade.CARD_SHADE_HASH;
+
+            else
+                mParameters.shade = Shade.CARD_SHADE_EMPTY;
+
             return mParameters;
         }
 
