@@ -6,6 +6,8 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
+import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 /**
@@ -90,12 +92,58 @@ public class SetFinder extends JFrame implements WindowListener {
         addWindowListener(this);
     }
 
-    private static void addRow()
+    private void addRow()
     {
     }
 
-    private static void findSolution()
+    private void findSolution()
     {
+        // Convert the List<List<Card>> to a 1D List
+        List<Card> cards = new ArrayList<Card>();
+
+        for (int i = 0; i < mCards.size(); ++i)
+            cards.addAll(mCards.get(i));
+
+        // Assume no solutions
+        for (int i = 0; i < cards.size(); ++i)
+        {
+            cards.get(i).setSolution(false);
+            cards.get(i).updateGUI();
+        }
+
+        Card card1;
+        Card card2;
+
+        for (int i = 0; i < cards.size(); ++i)
+        {
+            card1 = cards.get(i);
+
+            for (int j = i + 1; j < cards.size(); ++j)
+            {
+                card2 = cards.get(j);
+                Pair pair = new Pair(card1.mParameters, card2.mParameters);
+
+                for (int k = 0; k < cards.size(); ++k)
+                {
+                    if (cards.get(k).isEqual(pair.params3))
+                    {
+                        card1.setSolution(true);
+                        card2.setSolution(true);
+                        cards.get(k).setSolution(true);
+
+                        card1.updateGUI();
+                        card2.updateGUI();
+                        cards.get(k).updateGUI();
+
+                        //System.out.format("MATCH\n");
+                    }
+                }
+
+                //System.out.format("Card1[%s] Card2[%s]\n",
+                 //       card1.getParametersCode(), card2.getParametersCode());
+
+            }
+        }
     }
 
     public void windowOpened(WindowEvent windowEvent)

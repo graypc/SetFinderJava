@@ -58,32 +58,6 @@ public class Card extends JPanel implements MouseListener
         CARD_SHADE_EMPTY;
     }
 
-    class CardParameters
-    {
-        public CardParameters(int cNum, Color cColor, Shape cShape, Shade cShade)
-        {
-            num = cNum;
-            color = cColor;
-            shape = cShape;
-            shade = cShade;
-        }
-
-        public CardParameters()
-        {
-        }
-
-        public int num;
-        public Color color;
-        public Shape shape;
-        public Shade shade;
-    }
-
-    private boolean mIsSolution;
-    private JLabel mLabel;
-
-    public static int xSize = 100;
-    public static int ySize = 150;
-
     public Card(String parameterCodes)
     {
         char colorCh = parameterCodes.charAt(1);
@@ -146,6 +120,14 @@ public class Card extends JPanel implements MouseListener
         initialize();
     }
 
+    public boolean isEqual(CardParameters params)
+    {
+        return mParameters.num == params.num &&
+                mParameters.color == params.color &&
+                mParameters.shape == params.shape &&
+                mParameters.shade == params.shade;
+    }
+
     public String getParametersCode()
     {
         StringBuilder params = new StringBuilder();
@@ -192,6 +174,7 @@ public class Card extends JPanel implements MouseListener
         add(mLabel);
         updateIcon();
         addMouseListener(this);
+        setBackground(java.awt.Color.GRAY);
     }
 
     public void updateIcon()
@@ -282,6 +265,26 @@ public class Card extends JPanel implements MouseListener
         fileName.append(".png");
 
         return fileName.toString();
+    }
+
+    public void updateGUI()
+    {
+        java.awt.Color color = java.awt.Color.GRAY;
+
+        if (mIsSolution)
+            color = java.awt.Color.YELLOW;
+
+        setBackground(color);
+    }
+
+    public void setSolution(boolean solution)
+    {
+        mIsSolution = solution;
+    }
+
+    public boolean isSolution()
+    {
+        return mIsSolution;
     }
 
     class CardSelector extends JDialog
@@ -390,8 +393,34 @@ public class Card extends JPanel implements MouseListener
             comboBox.setMinimumSize(new Dimension(60, 30));
             comboBox.setPreferredSize(new Dimension(60, 30));
         }
+        JPanel mPanel;
     }
 
-    JPanel mPanel;
+    private boolean mIsSolution;
+    private JLabel mLabel;
+    public static int xSize = 100;
+    public static int ySize = 150;
+
     CardParameters mParameters;
+}
+
+class CardParameters
+{
+    public CardParameters(
+            int cNum, Card.Color cColor, Card.Shape cShape, Card.Shade cShade)
+    {
+        num = cNum;
+        color = cColor;
+        shape = cShape;
+        shade = cShade;
+    }
+
+    public CardParameters()
+    {
+    }
+
+    public int num;
+    public Card.Color color;
+    public Card.Shape shape;
+    public Card.Shade shade;
 }
