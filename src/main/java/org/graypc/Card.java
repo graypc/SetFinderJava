@@ -84,9 +84,101 @@ public class Card extends JPanel implements MouseListener
     public static int xSize = 100;
     public static int ySize = 150;
 
+    public Card(String parameterCodes)
+    {
+        char colorCh = parameterCodes.charAt(1);
+        char shapeCh = parameterCodes.charAt(2);
+        char shadeCh = parameterCodes.charAt(3);
+
+        mParameters = new CardParameters();
+        mParameters.num = Integer.parseInt(parameterCodes.substring(0, 1));
+
+        switch (colorCh)
+        {
+            case 'R':
+                mParameters.color = Color.CARD_COLOR_RED;
+                break;
+
+            case 'G':
+                mParameters.color = Color.CARD_COLOR_GREEN;
+                break;
+
+            default:
+                mParameters.color = Color.CARD_COLOR_PURPLE;
+                break;
+        }
+
+        switch (shapeCh)
+        {
+            case 'D':
+                mParameters.shape = Shape.CHARD_SHAPE_DIAMOND;
+                break;
+
+            case 'O':
+                mParameters.shape = Shape.CHARD_SHAPE_OVAL;
+                break;
+
+            default:
+                mParameters.shape = Shape.CHARD_SHAPE_SQUIGGLE;
+                break;
+        }
+
+        switch (shadeCh)
+        {
+            case 'F':
+                mParameters.shade = Shade.CARD_SHADE_FULL;
+                break;
+
+            case 'E':
+                mParameters.shade = Shade.CARD_SHADE_EMPTY;
+                break;
+
+            default:
+                mParameters.shade = Shade.CARD_SHADE_HASH;
+        }
+
+        initialize();
+    }
+
     public Card(int num, Shade shade, Color color, Shape shape)
     {
         mParameters = new CardParameters(num, color, shape, shade);
+        initialize();
+    }
+
+    public String getParametersCode()
+    {
+        StringBuilder params = new StringBuilder();
+
+        params.append(Integer.toString(mParameters.num));
+
+        String color = "R";
+        String shape = "D";
+        String shade = "F";
+
+        if (mParameters.color == Color.CARD_COLOR_PURPLE)
+            color = "P";
+
+        else if (mParameters.color == Color.CARD_COLOR_GREEN)
+            color = "G";
+
+        if (mParameters.shape == Shape.CHARD_SHAPE_OVAL)
+            shape = "O";
+
+        else if (mParameters.shape == Shape.CHARD_SHAPE_SQUIGGLE)
+            shape = "S";
+
+        if (mParameters.shade == Shade.CARD_SHADE_HASH)
+            shade = "H";
+
+        else if (mParameters.shade == Shade.CARD_SHADE_EMPTY)
+            shade = "E";
+
+        return params.append(color).append(shape).append(shade).toString();
+    }
+
+    public void initialize()
+    {
         mIsSolution = false;
 
         setPreferredSize(new Dimension(xSize, ySize));

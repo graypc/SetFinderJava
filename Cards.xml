@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<cards>
+  <row>
+    <card parameters="1GDH"/>
+    <card parameters="2PDH"/>
+    <card parameters="3GDH"/>
+  </row>
+  <row>
+    <card parameters="1RDE"/>
+    <card parameters="2RDE"/>
+    <card parameters="3RDE"/>
+  </row>
+  <row>
+    <card parameters="1POF"/>
+    <card parameters="2POF"/>
+    <card parameters="3POF"/>
+  </row>
+</cards>
